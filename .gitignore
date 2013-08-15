@@ -1,6 +1,4 @@
 lib
+out
 sudoku-scala.iml
 .idea
-org
-out
-
