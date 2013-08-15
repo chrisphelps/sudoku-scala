@@ -13,4 +13,13 @@ class SudokuGrid {
 
     def getColCells(row:Int, col:Int) =
       for(i <- 0 to 8 if i != row) yield (i,col)
+
+    def getPeerCells(row:Int, col:Int) = {
+      val rowmultiple = row / 3
+      val colmultiple = col / 3
+      for { i <- 0 until 3
+           j <- 0 until 3
+          if !((i == row % 3) && (j == col % 3))}
+        yield (i + 3 * rowmultiple, j + 3 * colmultiple)
+    }
 }
