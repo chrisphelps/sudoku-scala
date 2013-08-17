@@ -24,4 +24,9 @@ class SudokuGrid {
           if !((i == row % 3) && (j == col % 3))}
         yield (i + 3 * rowmultiple, j + 3 * colmultiple)
     }
+
+    def removePossibility(grid:IndexedSeq[IndexedSeq[Int]], row:Int, col:Int, possibility: Int) = {
+      val index = row * 9 + col
+      grid.updated(index,grid(index) diff List(possibility))
+    }
 }

@@ -38,5 +38,12 @@ class SudokuGridSpecification extends FunSpec {
       assert(empty.size === 81)
       assert(empty(0).size === 9)
     }
+
+    it("should remove a single possibility") {
+      val grid = new SudokuGrid
+      val empty = grid.emptyGrid
+      val newgrid = grid.removePossibility(empty,3,4,5)
+      assert(newgrid(3 * 9 + 4).size === 8)
+    }
   }
 }
