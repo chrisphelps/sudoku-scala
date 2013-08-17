@@ -31,5 +31,12 @@ class SudokuGridSpecification extends FunSpec {
       assert(grid.getPeerCells(1,3) === Vector((0,3),(0,4),(0,5),(1,4),(1,5),(2,3),(2,4),(2,5)))
       assert(grid.getPeerCells(7,8) === Vector((6,6),(6,7),(6,8),(7,6),(7,7),(8,6),(8,7),(8,8)))
     }
+
+    it("should generate an empty grid") {
+      val grid = new SudokuGrid
+      val empty = grid.emptyGrid
+      assert(empty.size === 81)
+      assert(empty(0).size === 9)
+    }
   }
 }
