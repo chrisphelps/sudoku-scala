@@ -31,5 +31,5 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
     }
 
-    def countPossibilities(row:Int, col:Int) = grid(3 * 9 + 4).size
+    def countPossibilities(row:Int, col:Int) = grid(row * 9 + col).size
 }

@@ -38,5 +38,18 @@ class SudokuGridSpecification extends FunSpec {
       assert(newgrid.countPossibilities(3,4) === 8)
     }
 
+    it("should remove many possibilities") {
+      val empty = new SudokuGrid
+      val removedPoss = empty.removePossibility(0,0,1)
+        .removePossibility(0,0,2)
+        .removePossibility(0,0,3)
+        .removePossibility(0,0,4)
+        .removePossibility(0,0,5)
+        .removePossibility(0,0,6)
+        .removePossibility(0,0,7)
+        .removePossibility(0,0,8)
+      assert(removedPoss.countPossibilities(0,0) === 1)
+    }
+
   }
 }
