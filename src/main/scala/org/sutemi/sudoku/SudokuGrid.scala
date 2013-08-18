@@ -7,7 +7,10 @@ package org.sutemi.sudoku
  * Time: 7:44 PM
  * To change this template use File | Settings | File Templates.
  */
-class SudokuGrid {
+class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
+
+    def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
+
     def emptyGrid = for (i <- 0 until 81) yield for (j <- 1 to 9) yield j
 
     def getRowCells(row:Int, col:Int) =
@@ -25,8 +28,10 @@ class SudokuGrid {
         yield (i + 3 * rowmultiple, j + 3 * colmultiple)
     }
 
-    def removePossibility(grid:IndexedSeq[IndexedSeq[Int]], row:Int, col:Int, possibility: Int) = {
+    def removePossibility(row:Int, col:Int, possibility: Int) = {
       val index = row * 9 + col
-      grid.updated(index,grid(index) diff List(possibility))
+      new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
     }
+
+    def countPossibilities(row:Int, col:Int) = grid(3 * 9 + 4).size
 }
