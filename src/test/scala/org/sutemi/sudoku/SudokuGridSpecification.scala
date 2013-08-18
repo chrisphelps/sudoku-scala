@@ -32,17 +32,11 @@ class SudokuGridSpecification extends FunSpec {
       assert(grid.getPeerCells(7,8) === Vector((6,6),(6,7),(6,8),(7,6),(7,7),(8,6),(8,7),(8,8)))
     }
 
-    it("should generate an empty grid") {
-      val grid = new SudokuGrid
-      val empty = grid.emptyGrid
-      assert(empty.size === 81)
-      assert(empty(0).size === 9)
-    }
-
     it("should remove a single possibility") {
       val grid = new SudokuGrid
       val newgrid = grid.removePossibility(3,4,5)
       assert(newgrid.countPossibilities(3,4) === 8)
     }
+
   }
 }

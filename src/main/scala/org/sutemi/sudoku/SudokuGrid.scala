@@ -11,8 +11,6 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
 
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
 
-    def emptyGrid = for (i <- 0 until 81) yield for (j <- 1 to 9) yield j
-
     def getRowCells(row:Int, col:Int) =
       for(i <- 0 to 8 if i != col) yield (row,i)
 
