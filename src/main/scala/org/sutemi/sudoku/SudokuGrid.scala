@@ -28,7 +28,7 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
 
     def removePossibility(row:Int, col:Int, possibility: Int) = {
       val index = row * 9 + col
-      new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
+      Some(new SudokuGrid(grid.updated(index,grid(index) diff List(possibility))))
     }
 
     def countPossibilities(row:Int, col:Int) = grid(row * 9 + col).size
