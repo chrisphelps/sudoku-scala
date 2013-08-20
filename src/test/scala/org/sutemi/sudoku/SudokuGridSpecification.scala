@@ -83,7 +83,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       }
     }
 
-    it("should return null when conjecture is not possible") {
+    it("should return none when conjecture is not possible") {
       val empty = new SudokuGrid
       val removed = empty.removePossibility(0,0,5)
       val placed = removed.get.placeConjecture(0,0,5)
