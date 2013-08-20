@@ -53,5 +53,19 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(removedPoss.get.countPossibilities(0,0) === 1)
     }
 
+    it("should return none when removing only possibility") {
+      val empty = new SudokuGrid
+      val prepped = empty.removePossibility(0,0,1)
+        .get.removePossibility(0,0,2)
+        .get.removePossibility(0,0,3)
+        .get.removePossibility(0,0,4)
+        .get.removePossibility(0,0,5)
+        .get.removePossibility(0,0,6)
+        .get.removePossibility(0,0,7)
+        .get.removePossibility(0,0,8)
+      val removed = prepped.get.removePossibility(0,0,9)
+      removed should be (None)
+    }
+
   }
 }
