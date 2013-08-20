@@ -36,7 +36,10 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
 
     def placeConjecture(row:Int, col:Int, conjecture:Int) = {
       val index = row * 9 + col
-      Some(new SudokuGrid(grid.updated(index,Vector(conjecture))))
+      if (!grid(index).contains(conjecture))
+        None
+      else
+        Some(new SudokuGrid(grid.updated(index,Vector(conjecture))))
     }
 
     def countPossibilities(row:Int, col:Int) = grid(row * 9 + col).size
