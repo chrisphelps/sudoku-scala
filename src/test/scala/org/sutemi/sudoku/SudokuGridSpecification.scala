@@ -74,6 +74,15 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(placed.get.countPossibilities(0,0) === 1)
     }
 
+    it("should propagate a conjecture") {
+      val empty = new SudokuGrid
+      val placed = empty.placeConjecture(0,0,5)
+      for (i <- 1 until 9) {
+        assert(placed.get.countPossibilities(i,0) === 8)
+        assert(placed.get.countPossibilities(0,i) === 8)
+      }
+    }
+
     it("should return null when conjecture is not possible") {
       val empty = new SudokuGrid
       val removed = empty.removePossibility(0,0,5)
@@ -81,5 +90,6 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       placed should be (None)
     }
 
+    // todo: test which does propagation and fails due to contradiction
   }
 }
