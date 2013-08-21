@@ -42,27 +42,33 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should remove many possibilities") {
       val empty = new SudokuGrid
-      val removedPoss = empty.removePossibility(0,0,1)
-        .get.removePossibility(0,0,2)
-        .get.removePossibility(0,0,3)
-        .get.removePossibility(0,0,4)
-        .get.removePossibility(0,0,5)
-        .get.removePossibility(0,0,6)
-        .get.removePossibility(0,0,7)
-        .get.removePossibility(0,0,8)
+      val removedPoss =
+        for {
+            a <- empty.removePossibility(0,0,1)
+            b <- a.removePossibility(0,0,2)
+            c <- b.removePossibility(0,0,3)
+            d <- c.removePossibility(0,0,4)
+            e <- d.removePossibility(0,0,5)
+            f <- e.removePossibility(0,0,6)
+            g <- f.removePossibility(0,0,7)
+            h <- g.removePossibility(0,0,8)
+        } yield h
       assert(removedPoss.get.countPossibilities(0,0) === 1)
     }
 
     it("should return none when removing only possibility") {
       val empty = new SudokuGrid
-      val prepped = empty.removePossibility(0,0,1)
-        .get.removePossibility(0,0,2)
-        .get.removePossibility(0,0,3)
-        .get.removePossibility(0,0,4)
-        .get.removePossibility(0,0,5)
-        .get.removePossibility(0,0,6)
-        .get.removePossibility(0,0,7)
-        .get.removePossibility(0,0,8)
+      val prepped =
+        for {
+            a <- empty.removePossibility(0,0,1)
+            b <- a.removePossibility(0,0,2)
+            c <- b.removePossibility(0,0,3)
+            d <- c.removePossibility(0,0,4)
+            e <- d.removePossibility(0,0,5)
+            f <- e.removePossibility(0,0,6)
+            g <- f.removePossibility(0,0,7)
+            h <- g.removePossibility(0,0,8)
+        } yield h
       val removed = prepped.get.removePossibility(0,0,9)
       removed should be (None)
     }
