@@ -44,11 +44,11 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
     }
 
 
-  private def getIndex(row: Int, col: Int): Int = {
-    row * 9 + col
-  }
+    private def getIndex(row: Int, col: Int): Int = {
+      row * 9 + col
+    }
 
-  def placeConjecture(row:Int, col:Int, conjecture:Int) = {
+    def placeConjecture(row:Int, col:Int, conjecture:Int) = {
       val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         None
