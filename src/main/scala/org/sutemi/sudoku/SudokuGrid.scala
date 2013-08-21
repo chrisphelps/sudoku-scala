@@ -30,8 +30,18 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       val index = row * 9 + col
       if (grid(index).size == 1 && grid(index).contains(possibility))
         None
-      else
-        Some(new SudokuGrid(grid.updated(index,grid(index) diff List(possibility))))
+      else {
+        val removed = new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
+        if (removed.countPossibilities(row,col) == 1)
+          removed.placeConjecture(row,col,removed.remainingPossibility(row,col))
+        else
+          Some(removed)
+      }
+    }
+
+    private def remainingPossibility(row:Int, col:Int) = {
+      val index = row * 9 + col
+      grid(index)(0)
     }
 
     def placeConjecture(row:Int, col:Int, conjecture:Int) = {

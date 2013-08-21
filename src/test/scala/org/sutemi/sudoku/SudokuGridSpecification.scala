@@ -53,6 +53,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
             g <- f.removePossibility(0,0,7)
             h <- g.removePossibility(0,0,8)
         } yield h
+      removedPoss should be ('defined)
       assert(removedPoss.get.countPossibilities(0,0) === 1)
     }
 
@@ -69,6 +70,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
             g <- f.removePossibility(0,0,7)
             h <- g.removePossibility(0,0,8)
         } yield h
+      prepped should be ('defined)
       val removed = prepped.get.removePossibility(0,0,9)
       removed should be (None)
     }
@@ -96,6 +98,25 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       placed should be (None)
     }
 
+    it("should place conjecture when all possibilities removed") {
+      val empty = new SudokuGrid
+      val prepped =
+        for {
+          a <- empty.removePossibility(0,0,1)
+          b <- a.removePossibility(0,0,2)
+          c <- b.removePossibility(0,0,3)
+          d <- c.removePossibility(0,0,4)
+          e <- d.removePossibility(0,0,5)
+          f <- e.removePossibility(0,0,6)
+          g <- f.removePossibility(0,0,7)
+          h <- g.removePossibility(0,0,8)
+        } yield h
+      assert(prepped.get.countPossibilities(0,0) === 1)
+      for (i <- 1 until 9) {
+        assert(prepped.get.countPossibilities(0,i) === 8)
+        assert(prepped.get.countPossibilities(i,0) === 8)
+      }
+    }
     // todo: test which does propagation and fails due to contradiction
   }
 }
