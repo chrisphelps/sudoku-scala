@@ -53,7 +53,6 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
             g <- f.removePossibility(0,0,7)
             h <- g.removePossibility(0,0,8)
         } yield h
-      removedPoss should be ('defined)
       assert(removedPoss.get.countPossibilities(0,0) === 1)
     }
 
@@ -70,7 +69,6 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
             g <- f.removePossibility(0,0,7)
             h <- g.removePossibility(0,0,8)
         } yield h
-      prepped should be ('defined)
       val removed = prepped.get.removePossibility(0,0,9)
       removed should be (None)
     }

@@ -27,7 +27,7 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
     }
 
     def removePossibility(row:Int, col:Int, possibility: Int) = {
-      val index = row * 9 + col
+      val index = getIndex(row, col)
       if (grid(index).size == 1 && grid(index).contains(possibility))
         None
       else {
@@ -40,12 +40,16 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
     }
 
     private def remainingPossibility(row:Int, col:Int) = {
-      val index = row * 9 + col
-      grid(index)(0)
+      grid(getIndex(row, col))(0)
     }
 
-    def placeConjecture(row:Int, col:Int, conjecture:Int) = {
-      val index = row * 9 + col
+
+  private def getIndex(row: Int, col: Int): Int = {
+    row * 9 + col
+  }
+
+  def placeConjecture(row:Int, col:Int, conjecture:Int) = {
+      val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         None
       else {
@@ -71,5 +75,5 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       }
     }
 
-    def countPossibilities(row:Int, col:Int) = grid(row * 9 + col).size
+    def countPossibilities(row:Int, col:Int) = grid(getIndex(row, col)).size
 }
