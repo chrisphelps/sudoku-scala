@@ -58,6 +58,17 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       }
     }
 
+//    private def propagateConjectures(points:List[(Int,Int,Int)],grid:Option[SudokuGrid]) = {
+//      grid match {
+//        case None => None
+//
+//      }
+//    }
+
+    def placeConjectures(points:List[(Int,Int,Int)]):Option[SudokuGrid] = {
+      Some(this)
+    }
+
     private def propagated(row:Int, col:Int, conjecture:Int) = {
       val roweliminated = propagateElimination(getRowCells(row,col).toList, conjecture, Some(this))
       val coleliminated = propagateElimination(getColCells(row,col).toList, conjecture, roweliminated)
