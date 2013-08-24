@@ -7,7 +7,20 @@ package org.sutemi.sudoku
  * Time: 7:44 PM
  * To change this template use File | Settings | File Templates.
  */
-class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
+
+abstract class SudokuGrid {
+  def removePossibility(row:Int, col:Int, possibility:Int):Option[SudokuGrid]
+  def placeConjecture(row:Int, col:Int, conjecture:Int):Option[SudokuGrid]
+  def countPossibilities(row:Int, col:Int):Int
+}
+
+class ContradictorySudokuGrid extends SudokuGrid {
+  override def removePossibility(row:Int, col:Int, possibility:Int) = {None}
+  override def placeConjecture(row:Int, col:Int, conjecture:Int) = {None}
+  override def countPossibilities(row:Int, col:Int) = 0
+}
+
+class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends SudokuGrid {
 
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
 
@@ -26,12 +39,12 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
         yield (i + 3 * rowmultiple, j + 3 * colmultiple)
     }
 
-    def removePossibility(row:Int, col:Int, possibility: Int) = {
+    override def removePossibility(row:Int, col:Int, possibility: Int) = {
       val index = getIndex(row, col)
       if (grid(index).size == 1 && grid(index).contains(possibility))
         None
       else {
-        val removed = new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
+        val removed = new LiveSudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
         if (removed.countPossibilities(row,col) == 1)
           removed.placeConjecture(row,col,removed.remainingPossibility(row,col))
         else
@@ -48,12 +61,12 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       row * 9 + col
     }
 
-    def placeConjecture(row:Int, col:Int, conjecture:Int) = {
+    override def placeConjecture(row:Int, col:Int, conjecture:Int) = {
       val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         None
       else {
-        val eliminated = new SudokuGrid(grid.updated(index,Vector(conjecture)))
+        val eliminated = new LiveSudokuGrid(grid.updated(index,Vector(conjecture)))
         eliminated.propagated(row,col,conjecture)
       }
     }
@@ -86,5 +99,5 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       }
     }
 
-    def countPossibilities(row:Int, col:Int) = grid(getIndex(row, col)).size
+    override def countPossibilities(row:Int, col:Int) = grid(getIndex(row, col)).size
 }
