@@ -33,93 +33,87 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
     it("should remove a single possibility") {
       val grid = new LiveSudokuGrid
       val newgrid = grid.removePossibility(3,4,5)
-      newgrid should be ('defined)
-      assert(newgrid.get.countPossibilities(3,4) === 8)
+      newgrid should not be (ContradictorySudokuGrid)
+      assert(newgrid.countPossibilities(3,4) === 8)
     }
 
     it("should remove many possibilities") {
       val empty = new LiveSudokuGrid
       val removedPoss =
-        for {
-            a <- empty.removePossibility(0,0,1)
-            b <- a.removePossibility(0,0,2)
-            c <- b.removePossibility(0,0,3)
-            d <- c.removePossibility(0,0,4)
-            e <- d.removePossibility(0,0,5)
-            f <- e.removePossibility(0,0,6)
-            g <- f.removePossibility(0,0,7)
-            h <- g.removePossibility(0,0,8)
-        } yield h
-      assert(removedPoss.get.countPossibilities(0,0) === 1)
+            empty.removePossibility(0,0,1)
+            .removePossibility(0,0,2)
+            .removePossibility(0,0,3)
+            .removePossibility(0,0,4)
+            .removePossibility(0,0,5)
+            .removePossibility(0,0,6)
+            .removePossibility(0,0,7)
+            .removePossibility(0,0,8)
+      assert(removedPoss.countPossibilities(0,0) === 1)
     }
 
     it("should return none when removing only possibility") {
       val empty = new LiveSudokuGrid
       val prepped =
-        for {
-            a <- empty.removePossibility(0,0,1)
-            b <- a.removePossibility(0,0,2)
-            c <- b.removePossibility(0,0,3)
-            d <- c.removePossibility(0,0,4)
-            e <- d.removePossibility(0,0,5)
-            f <- e.removePossibility(0,0,6)
-            g <- f.removePossibility(0,0,7)
-            h <- g.removePossibility(0,0,8)
-        } yield h
-      val removed = prepped.get.removePossibility(0,0,9)
-      removed should be (None)
+            empty.removePossibility(0,0,1)
+            .removePossibility(0,0,2)
+            .removePossibility(0,0,3)
+            .removePossibility(0,0,4)
+            .removePossibility(0,0,5)
+            .removePossibility(0,0,6)
+            .removePossibility(0,0,7)
+            .removePossibility(0,0,8)
+      val removed = prepped.removePossibility(0,0,9)
+      removed should be (ContradictorySudokuGrid)
     }
 
     it("should place a conjecture") {
       val empty = new LiveSudokuGrid
       val placed = empty.placeConjecture(0,0,5)
-      placed should be ('defined)
-      assert(placed.get.countPossibilities(0,0) === 1)
+      placed should not be (ContradictorySudokuGrid)
+      assert(placed.countPossibilities(0,0) === 1)
     }
 
     it("should propagate a conjecture") {
       val empty = new LiveSudokuGrid
       val placed = empty.placeConjecture(0,0,5)
       for (i <- 1 until 9) {
-        assert(placed.get.countPossibilities(i,0) === 8)
-        assert(placed.get.countPossibilities(0,i) === 8)
+        assert(placed.countPossibilities(i,0) === 8)
+        assert(placed.countPossibilities(0,i) === 8)
       }
     }
 
     it("should return none when conjecture is not possible") {
       val empty = new LiveSudokuGrid
       val removed = empty.removePossibility(0,0,5)
-      val placed = removed.get.placeConjecture(0,0,5)
-      placed should be (None)
+      val placed = removed.placeConjecture(0,0,5)
+      placed should be (ContradictorySudokuGrid)
     }
 
     it("should place conjecture when all possibilities removed") {
       val empty = new LiveSudokuGrid
       val prepped =
-        for {
-          a <- empty.removePossibility(0,0,1)
-          b <- a.removePossibility(0,0,2)
-          c <- b.removePossibility(0,0,3)
-          d <- c.removePossibility(0,0,4)
-          e <- d.removePossibility(0,0,5)
-          f <- e.removePossibility(0,0,6)
-          g <- f.removePossibility(0,0,7)
-          h <- g.removePossibility(0,0,8)
-        } yield h
-      assert(prepped.get.countPossibilities(0,0) === 1)
+          empty.removePossibility(0,0,1)
+          .removePossibility(0,0,2)
+          .removePossibility(0,0,3)
+          .removePossibility(0,0,4)
+          .removePossibility(0,0,5)
+          .removePossibility(0,0,6)
+          .removePossibility(0,0,7)
+          .removePossibility(0,0,8)
+      assert(prepped.countPossibilities(0,0) === 1)
       for (i <- 1 until 9) {
-        assert(prepped.get.countPossibilities(0,i) === 8)
-        assert(prepped.get.countPossibilities(i,0) === 8)
+        assert(prepped.countPossibilities(0,i) === 8)
+        assert(prepped.countPossibilities(i,0) === 8)
       }
     }
 
 //    ignore("should populate a grid from a list of givens") {
-//      val empty = new SudokuGrid
+//      val empty = new LiveSudokuGrid
 //      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
-//      assert(givens.get.countPossibilities(0,0) === 1)
-//      assert(givens.get.countPossibilities(0,2) === 8)
-//      assert(givens.get.countPossibilities(0,1) === 7)
-//      assert(givens.get.countPossibilities(1,1) === 1)
+//      assert(givens.countPossibilities(0,0) === 1)
+//      assert(givens.countPossibilities(0,2) === 8)
+//      assert(givens.countPossibilities(0,1) === 7)
+//      assert(givens.countPossibilities(1,1) === 1)
 //    }
 
     // todo: test which does propagation and fails due to contradiction
