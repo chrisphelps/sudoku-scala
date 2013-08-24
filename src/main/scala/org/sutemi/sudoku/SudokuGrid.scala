@@ -20,24 +20,26 @@ class ContradictorySudokuGrid extends SudokuGrid {
   override def countPossibilities(row:Int, col:Int) = 0
 }
 
+object SudokuGrid {
+  def getRowCells(row:Int, col:Int) =
+    for(i <- 0 to 8 if i != col) yield (row,i)
+
+  def getColCells(row:Int, col:Int) =
+    for(i <- 0 to 8 if i != row) yield (i,col)
+
+  def getPeerCells(row:Int, col:Int) = {
+    val rowmultiple = row / 3
+    val colmultiple = col / 3
+    for { i <- 0 until 3
+          j <- 0 until 3
+          if !((i == row % 3) && (j == col % 3))}
+    yield (i + 3 * rowmultiple, j + 3 * colmultiple)
+  }
+}
+
 class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends SudokuGrid {
 
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
-
-    def getRowCells(row:Int, col:Int) =
-      for(i <- 0 to 8 if i != col) yield (row,i)
-
-    def getColCells(row:Int, col:Int) =
-      for(i <- 0 to 8 if i != row) yield (i,col)
-
-    def getPeerCells(row:Int, col:Int) = {
-      val rowmultiple = row / 3
-      val colmultiple = col / 3
-      for { i <- 0 until 3
-           j <- 0 until 3
-          if !((i == row % 3) && (j == col % 3))}
-        yield (i + 3 * rowmultiple, j + 3 * colmultiple)
-    }
 
     override def removePossibility(row:Int, col:Int, possibility: Int) = {
       val index = getIndex(row, col)
@@ -83,9 +85,9 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     }
 
     private def propagated(row:Int, col:Int, conjecture:Int) = {
-      val roweliminated = propagateElimination(getRowCells(row,col).toList, conjecture, Some(this))
-      val coleliminated = propagateElimination(getColCells(row,col).toList, conjecture, roweliminated)
-      val peereliminated = propagateElimination(getPeerCells(row,col).toList, conjecture, coleliminated)
+      val roweliminated = propagateElimination(SudokuGrid.getRowCells(row,col).toList, conjecture, Some(this))
+      val coleliminated = propagateElimination(SudokuGrid.getColCells(row,col).toList, conjecture, roweliminated)
+      val peereliminated = propagateElimination(SudokuGrid.getPeerCells(row,col).toList, conjecture, coleliminated)
       peereliminated
     }
 

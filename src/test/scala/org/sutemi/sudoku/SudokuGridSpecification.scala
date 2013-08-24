@@ -17,20 +17,17 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
   describe("A SudokuGrid") {
 
     it("should find cells in the row") {
-      val grid = new LiveSudokuGrid
-      assert(grid.getRowCells(1,3) === Vector((1,0),(1,1),(1,2),(1,4),(1,5),(1,6),(1,7),(1,8)))
+      assert(SudokuGrid.getRowCells(1,3) === Vector((1,0),(1,1),(1,2),(1,4),(1,5),(1,6),(1,7),(1,8)))
     }
 
     it("should find cells in the column") {
-      val grid = new LiveSudokuGrid
-      assert(grid.getColCells(1,3) === Vector((0,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8,3)))
+      assert(SudokuGrid.getColCells(1,3) === Vector((0,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8,3)))
     }
 
     it("should find peer cells in the unit") {
-      val grid = new LiveSudokuGrid
-      assert(grid.getPeerCells(0,0) === Vector((0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)))
-      assert(grid.getPeerCells(1,3) === Vector((0,3),(0,4),(0,5),(1,4),(1,5),(2,3),(2,4),(2,5)))
-      assert(grid.getPeerCells(7,8) === Vector((6,6),(6,7),(6,8),(7,6),(7,7),(8,6),(8,7),(8,8)))
+      assert(SudokuGrid.getPeerCells(0,0) === Vector((0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)))
+      assert(SudokuGrid.getPeerCells(1,3) === Vector((0,3),(0,4),(0,5),(1,4),(1,5),(2,3),(2,4),(2,5)))
+      assert(SudokuGrid.getPeerCells(7,8) === Vector((6,6),(6,7),(6,8),(7,6),(7,7),(8,6),(8,7),(8,8)))
     }
 
     it("should remove a single possibility") {
