@@ -35,7 +35,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should remove a single possibility") {
       val grid = new SudokuGrid
-      val newgrid = grid.removePossibility(3,4,5)
+      val newgrid = grid.removePossibility(grid,3,4,5)
       newgrid should be ('defined)
       assert(newgrid.get.countPossibilities(3,4) === 8)
     }
@@ -44,14 +44,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val empty = new SudokuGrid
       val removedPoss =
         for {
-            a <- empty.removePossibility(0,0,1)
-            b <- a.removePossibility(0,0,2)
-            c <- b.removePossibility(0,0,3)
-            d <- c.removePossibility(0,0,4)
-            e <- d.removePossibility(0,0,5)
-            f <- e.removePossibility(0,0,6)
-            g <- f.removePossibility(0,0,7)
-            h <- g.removePossibility(0,0,8)
+            a <- empty.removePossibility(empty,0,0,1)
+            b <- a.removePossibility(a,0,0,2)
+            c <- b.removePossibility(b,0,0,3)
+            d <- c.removePossibility(c,0,0,4)
+            e <- d.removePossibility(d,0,0,5)
+            f <- e.removePossibility(e,0,0,6)
+            g <- f.removePossibility(f,0,0,7)
+            h <- g.removePossibility(g,0,0,8)
         } yield h
       assert(removedPoss.get.countPossibilities(0,0) === 1)
     }
@@ -60,29 +60,29 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val empty = new SudokuGrid
       val prepped =
         for {
-            a <- empty.removePossibility(0,0,1)
-            b <- a.removePossibility(0,0,2)
-            c <- b.removePossibility(0,0,3)
-            d <- c.removePossibility(0,0,4)
-            e <- d.removePossibility(0,0,5)
-            f <- e.removePossibility(0,0,6)
-            g <- f.removePossibility(0,0,7)
-            h <- g.removePossibility(0,0,8)
+            a <- empty.removePossibility(empty,0,0,1)
+            b <- a.removePossibility(a,0,0,2)
+            c <- b.removePossibility(b,0,0,3)
+            d <- c.removePossibility(c,0,0,4)
+            e <- d.removePossibility(d,0,0,5)
+            f <- e.removePossibility(e,0,0,6)
+            g <- f.removePossibility(f,0,0,7)
+            h <- g.removePossibility(g,0,0,8)
         } yield h
-      val removed = prepped.get.removePossibility(0,0,9)
+      val removed = prepped.get.removePossibility(prepped.get,0,0,9)
       removed should be (None)
     }
 
     it("should place a conjecture") {
       val empty = new SudokuGrid
-      val placed = empty.placeConjecture(0,0,5)
+      val placed = empty.placeConjecture(empty,0,0,5)
       placed should be ('defined)
       assert(placed.get.countPossibilities(0,0) === 1)
     }
 
     it("should propagate a conjecture") {
       val empty = new SudokuGrid
-      val placed = empty.placeConjecture(0,0,5)
+      val placed = empty.placeConjecture(empty,0,0,5)
       for (i <- 1 until 9) {
         assert(placed.get.countPossibilities(i,0) === 8)
         assert(placed.get.countPossibilities(0,i) === 8)
@@ -91,8 +91,8 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should return none when conjecture is not possible") {
       val empty = new SudokuGrid
-      val removed = empty.removePossibility(0,0,5)
-      val placed = removed.get.placeConjecture(0,0,5)
+      val removed = empty.removePossibility(empty,0,0,5)
+      val placed = removed.get.placeConjecture(removed.get,0,0,5)
       placed should be (None)
     }
 
@@ -100,14 +100,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val empty = new SudokuGrid
       val prepped =
         for {
-          a <- empty.removePossibility(0,0,1)
-          b <- a.removePossibility(0,0,2)
-          c <- b.removePossibility(0,0,3)
-          d <- c.removePossibility(0,0,4)
-          e <- d.removePossibility(0,0,5)
-          f <- e.removePossibility(0,0,6)
-          g <- f.removePossibility(0,0,7)
-          h <- g.removePossibility(0,0,8)
+          a <- empty.removePossibility(empty,0,0,1)
+          b <- a.removePossibility(a,0,0,2)
+          c <- b.removePossibility(b,0,0,3)
+          d <- c.removePossibility(c,0,0,4)
+          e <- d.removePossibility(d,0,0,5)
+          f <- e.removePossibility(e,0,0,6)
+          g <- f.removePossibility(f,0,0,7)
+          h <- g.removePossibility(g,0,0,8)
         } yield h
       assert(prepped.get.countPossibilities(0,0) === 1)
       for (i <- 1 until 9) {
@@ -116,14 +116,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       }
     }
 
-    ignore("should populate a grid from a list of givens") {
-      val empty = new SudokuGrid
-      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
-      assert(givens.get.countPossibilities(0,0) === 1)
-      assert(givens.get.countPossibilities(0,2) === 8)
-      assert(givens.get.countPossibilities(0,1) === 7)
-      assert(givens.get.countPossibilities(1,1) === 1)
-    }
+//    ignore("should populate a grid from a list of givens") {
+//      val empty = new SudokuGrid
+//      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
+//      assert(givens.get.countPossibilities(0,0) === 1)
+//      assert(givens.get.countPossibilities(0,2) === 8)
+//      assert(givens.get.countPossibilities(0,1) === 7)
+//      assert(givens.get.countPossibilities(1,1) === 1)
+//    }
 
     // todo: test which does propagation and fails due to contradiction
   }
