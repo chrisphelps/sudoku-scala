@@ -26,14 +26,14 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
         yield (i + 3 * rowmultiple, j + 3 * colmultiple)
     }
 
-    def removePossibility(thegrid:SudokuGrid, row:Int, col:Int, possibility: Int) = {
+    def removePossibility(row:Int, col:Int, possibility: Int) = {
       val index = getIndex(row, col)
       if (grid(index).size == 1 && grid(index).contains(possibility))
         None
       else {
         val removed = new SudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
         if (removed.countPossibilities(row,col) == 1)
-          removed.placeConjecture(removed,row,col,removed.remainingPossibility(row,col))
+          removed.placeConjecture(row,col,removed.remainingPossibility(row,col))
         else
           Some(removed)
       }
@@ -48,7 +48,7 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
       row * 9 + col
     }
 
-    def placeConjecture(thegrid:SudokuGrid, row:Int, col:Int, conjecture:Int) = {
+    def placeConjecture(row:Int, col:Int, conjecture:Int) = {
       val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         None
@@ -81,7 +81,7 @@ class SudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) {
         case None => None
         case Some(thegrid) => cells match {
           case Nil => Some(thegrid)
-          case (row,col)::tail => propagateElimination(tail,conjecture,thegrid.removePossibility(thegrid,row,col,conjecture))
+          case (row,col)::tail => propagateElimination(tail,conjecture,thegrid.removePossibility(row,col,conjecture))
         }
       }
     }
