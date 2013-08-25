@@ -107,6 +107,15 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       }
     }
 
+    it("should handle propagating contradictions") {
+      val contradiction = ContradictorySudokuGrid
+      val placed = contradiction.placeConjecture(0,0,5)
+      val removed = contradiction.removePossibility(0,0,5)
+      placed should be (ContradictorySudokuGrid)
+      removed should be (ContradictorySudokuGrid)
+      assert(contradiction.countPossibilities(0,0) === 0)
+    }
+
 //    ignore("should populate a grid from a list of givens") {
 //      val empty = new LiveSudokuGrid
 //      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
