@@ -11,12 +11,14 @@ package org.sutemi.sudoku
 abstract class SudokuGrid {
   def removePossibility(row:Int, col:Int, possibility:Int):SudokuGrid
   def placeConjecture(row:Int, col:Int, conjecture:Int):SudokuGrid
+  def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid
   def countPossibilities(row:Int, col:Int):Int
 }
 
 object ContradictorySudokuGrid extends SudokuGrid {
   override def removePossibility(row:Int, col:Int, possibility:Int) = ContradictorySudokuGrid
   override def placeConjecture(row:Int, col:Int, conjecture:Int) = ContradictorySudokuGrid
+  override def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = ContradictorySudokuGrid
   override def countPossibilities(row:Int, col:Int) = 0
 }
 
@@ -42,6 +44,8 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
 
     override def removePossibility(row:Int, col:Int, possibility: Int) = {
+      //println("removing possibility: ("+row+","+col+") != " + possibility)
+
       val index = getIndex(row, col)
       if (grid(index).size == 1 && grid(index).contains(possibility))
         ContradictorySudokuGrid
@@ -64,6 +68,7 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     }
 
     override def placeConjecture(row:Int, col:Int, conjecture:Int) = {
+      //println("placing conjecture: ("+row+","+col+") = " + conjecture)
       val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         ContradictorySudokuGrid
@@ -80,8 +85,11 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
 //      }
 //    }
 
-    def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = {
-      this
+    override def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = {
+      points match {
+        case Nil => this
+        case (row,col,conjecture)::tail => placeConjecture(row,col,conjecture).placeConjectures(tail)
+      }
     }
 
     private def propagated(row:Int, col:Int, conjecture:Int) = {

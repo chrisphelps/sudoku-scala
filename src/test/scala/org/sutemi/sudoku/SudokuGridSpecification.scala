@@ -116,14 +116,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(contradiction.countPossibilities(0,0) === 0)
     }
 
-//    ignore("should populate a grid from a list of givens") {
-//      val empty = new LiveSudokuGrid
-//      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
-//      assert(givens.countPossibilities(0,0) === 1)
-//      assert(givens.countPossibilities(0,2) === 8)
-//      assert(givens.countPossibilities(0,1) === 7)
-//      assert(givens.countPossibilities(1,1) === 1)
-//    }
+    it("should populate a grid from a list of givens") {
+      val empty = new LiveSudokuGrid
+      val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
+      assert(givens.countPossibilities(0,0) === 1)
+      assert(givens.countPossibilities(0,2) === 8)
+      assert(givens.countPossibilities(0,1) === 7)
+      assert(givens.countPossibilities(1,1) === 1)
+    }
 
     // todo: test which does propagation and fails due to contradiction
   }
