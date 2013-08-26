@@ -39,29 +39,13 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should remove many possibilities") {
       val empty = new LiveSudokuGrid
-      val removedPoss =
-            empty.removePossibility(0,0,1)
-            .removePossibility(0,0,2)
-            .removePossibility(0,0,3)
-            .removePossibility(0,0,4)
-            .removePossibility(0,0,5)
-            .removePossibility(0,0,6)
-            .removePossibility(0,0,7)
-            .removePossibility(0,0,8)
-      assert(removedPoss.countPossibilities(0,0) === 1)
+      val removed = (1 to 8).foldLeft(empty.asInstanceOf[SudokuGrid])((grid,poss) => grid.removePossibility(0,0,poss))
+      assert(removed.countPossibilities(0,0) === 1)
     }
 
     it("should return none when removing only possibility") {
       val empty = new LiveSudokuGrid
-      val prepped =
-            empty.removePossibility(0,0,1)
-            .removePossibility(0,0,2)
-            .removePossibility(0,0,3)
-            .removePossibility(0,0,4)
-            .removePossibility(0,0,5)
-            .removePossibility(0,0,6)
-            .removePossibility(0,0,7)
-            .removePossibility(0,0,8)
+      val prepped = (1 to 8).foldLeft(empty.asInstanceOf[SudokuGrid])((grid,poss) => grid.removePossibility(0,0,poss))
       val removed = prepped.removePossibility(0,0,9)
       removed should be (ContradictorySudokuGrid)
     }
@@ -90,7 +74,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       }
     }
 
-    it("should return none when conjecture is not possible") {
+    it("should return none when conjecturecountPossibilities is not possible") {
       val empty = new LiveSudokuGrid
       val removed = empty.removePossibility(0,0,5)
       val placed = removed.placeConjecture(0,0,5)
@@ -99,15 +83,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should place conjecture when all possibilities removed") {
       val empty = new LiveSudokuGrid
-      val prepped =
-          empty.removePossibility(0,0,1)
-          .removePossibility(0,0,2)
-          .removePossibility(0,0,3)
-          .removePossibility(0,0,4)
-          .removePossibility(0,0,5)
-          .removePossibility(0,0,6)
-          .removePossibility(0,0,7)
-          .removePossibility(0,0,8)
+      val prepped = (1 to 8).foldLeft(empty.asInstanceOf[SudokuGrid])((grid,poss) => grid.removePossibility(0,0,poss))
       assert(prepped.countPossibilities(0,0) === 1)
       for (i <- 1 until 9) {
         assert(prepped.countPossibilities(0,i) === 8)
