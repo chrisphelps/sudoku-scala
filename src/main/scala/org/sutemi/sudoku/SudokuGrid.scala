@@ -44,14 +44,12 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
 
     override def removePossibility(row:Int, col:Int, possibility: Int) = {
-      //println("removing possibility: ("+row+","+col+") != " + possibility)
-
       val index = getIndex(row, col)
       if (grid(index).size == 1 && grid(index).contains(possibility))
         ContradictorySudokuGrid
       else {
         val removed = new LiveSudokuGrid(grid.updated(index,grid(index) diff List(possibility)))
-        if (removed.countPossibilities(row,col) == 1)
+        if (removed.countPossibilities(row,col) == 1 && this.countPossibilities(row,col) != 1)
           removed.placeConjecture(row,col,removed.remainingPossibility(row,col))
         else
           removed
@@ -68,7 +66,6 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     }
 
     override def placeConjecture(row:Int, col:Int, conjecture:Int) = {
-      //println("placing conjecture: ("+row+","+col+") = " + conjecture)
       val index = getIndex(row, col)
       if (!grid(index).contains(conjecture))
         ContradictorySudokuGrid
@@ -77,13 +74,6 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
         eliminated.propagated(row,col,conjecture)
       }
     }
-
-//    private def propagateConjectures(points:List[(Int,Int,Int)],grid:Option[SudokuGrid]) = {
-//      grid match {
-//        case None => None
-//
-//      }
-//    }
 
     override def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = {
       points match {

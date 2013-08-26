@@ -73,6 +73,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(placed.countPossibilities(0,0) === 1)
     }
 
+    it("should place a conjecture not in 0,0") {
+      val empty = new LiveSudokuGrid
+      val placed = empty.placeConjecture(1,1,8)
+      placed should not be (ContradictorySudokuGrid)
+      assert(placed.countPossibilities(1,1) === 1)
+      assert(placed.countPossibilities(1,0) === 8)
+    }
+
     it("should propagate a conjecture") {
       val empty = new LiveSudokuGrid
       val placed = empty.placeConjecture(0,0,5)
@@ -120,7 +128,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val empty = new LiveSudokuGrid
       val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
       assert(givens.countPossibilities(0,0) === 1)
-      assert(givens.countPossibilities(0,2) === 8)
+      assert(givens.countPossibilities(0,3) === 8)
       assert(givens.countPossibilities(0,1) === 7)
       assert(givens.countPossibilities(1,1) === 1)
     }
