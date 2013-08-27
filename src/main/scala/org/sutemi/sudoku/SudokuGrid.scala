@@ -13,6 +13,7 @@ abstract class SudokuGrid {
   def placeConjecture(row:Int, col:Int, conjecture:Int):SudokuGrid
   def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid
   def countPossibilities(row:Int, col:Int):Int
+  def isSolution:Boolean
 }
 
 object ContradictorySudokuGrid extends SudokuGrid {
@@ -20,6 +21,7 @@ object ContradictorySudokuGrid extends SudokuGrid {
   override def placeConjecture(row:Int, col:Int, conjecture:Int) = ContradictorySudokuGrid
   override def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = ContradictorySudokuGrid
   override def countPossibilities(row:Int, col:Int) = 0
+  override def isSolution = false
 }
 
 object SudokuGrid {
@@ -97,4 +99,6 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     }
 
     override def countPossibilities(row:Int, col:Int) = grid(getIndex(row, col)).size
+
+    override def isSolution = grid.forall(_.length == 1)
 }
