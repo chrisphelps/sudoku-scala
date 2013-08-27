@@ -74,7 +74,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       }
     }
 
-    it("should return none when conjecturecountPossibilities is not possible") {
+    it("should return contradiction when conjecturecountPossibilities is not possible") {
       val empty = new LiveSudokuGrid
       val removed = empty.removePossibility(0,0,5)
       val placed = removed.placeConjecture(0,0,5)
@@ -100,6 +100,14 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(contradiction.countPossibilities(0,0) === 0)
     }
 
+    it("should return a contradiction when propagation leads to conflict") {
+      val empty = new LiveSudokuGrid
+      val prepped = List(1,3,4,5,6,7,9).foldLeft(empty.asInstanceOf[SudokuGrid])((grid,poss) =>
+        grid.removePossibility(0,2,poss).removePossibility(0,3,poss).removePossibility(0,4,poss))
+      val placed = prepped.placeConjecture(0,2,2)
+      placed should be (ContradictorySudokuGrid)
+    }
+
     it("should populate a grid from a list of givens") {
       val empty = new LiveSudokuGrid
       val givens = empty.placeConjectures(List((0,0,5),(1,1,8)))
@@ -108,7 +116,5 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(givens.countPossibilities(0,1) === 7)
       assert(givens.countPossibilities(1,1) === 1)
     }
-
-    // todo: test which does propagation and fails due to contradiction
   }
 }
