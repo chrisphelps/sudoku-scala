@@ -39,6 +39,12 @@ object SudokuGrid {
           if !((i == row % 3) && (j == col % 3))}
     yield (i + 3 * rowmultiple, j + 3 * colmultiple)
   }
+
+  def apply(puzzle:String):SudokuGrid = {
+    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1/9,a._1%9,a._2.asDigit)).filter(_._3 != 0)
+    val empty = new LiveSudokuGrid
+    empty.placeConjectures(givens.toList)
+  }
 }
 
 class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends SudokuGrid {

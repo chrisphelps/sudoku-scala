@@ -117,6 +117,16 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(givens.countPossibilities(1,1) === 1)
     }
 
+    it("should populate a grid from a string") {
+      val givens = SudokuGrid("500000000080000000000000000000000000000000000000000000000000000000000000000000000")
+      assert(givens.isInstanceOf[LiveSudokuGrid])
+      assert(givens.countPossibilities(0,0) === 1)
+      assert(givens.countPossibilities(0,3) === 8)
+      assert(givens.countPossibilities(0,1) === 7)
+      assert(givens.countPossibilities(1,1) === 1)
+    }
+
+
     it("should identify a solution") {
       val empty = new LiveSudokuGrid
       val contradiction = ContradictorySudokuGrid
