@@ -146,6 +146,8 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
     }
 
     it("should identify the first cell with minimal possibilities") {
+      val empty = SudokuGrid()
+      assert(empty.minimalPossibilityCell === Some(0,0))
       val givens = SudokuGrid("500000000080000000000000000000000000000000000000000000000000000000000000000000000")
       assert(givens.minimalPossibilityCell === Some((0,1)))
       val removed = givens.removePossibility(5,5,1).removePossibility(5,5,2).removePossibility(5,5,3).removePossibility(5,5,4)
