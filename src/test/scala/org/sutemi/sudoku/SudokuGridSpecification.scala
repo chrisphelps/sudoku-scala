@@ -155,5 +155,45 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val solved = SudokuGrid("147258369258369147369147258471825936582936714693714825714582693825693471936471582")
       assert(solved.minimalPossibilityCell === None)
     }
+
+    it("should generate a printable string for an empty grid") {
+      val empty = SudokuGrid()
+      val expectedstring =
+        "[. . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          "---------------------\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          "---------------------\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .]"
+      assert(empty.toString() === expectedstring)
+    }
   }
+
+
+
+//  def "toString for partially filled grid"() {
+//    given:
+//      grid.placeGiven(new CellPoint(0,0),1)
+//    grid.placeGiven(new CellPoint(3,4),5)
+//    def expectedgrid =
+//      "1 . . | . . . | . . .\n" +
+//        ". . . | . . . | . . .\n" +
+//        ". . . | . . . | . . .\n" +
+//        "---------------------\n" +
+//        ". . . | . 5 . | . . .\n" +
+//        ". . . | . . . | . . .\n" +
+//        ". . . | . . . | . . .\n" +
+//        "---------------------\n" +
+//        ". . . | . . . | . . .\n" +
+//        ". . . | . . . | . . .\n" +
+//        ". . . | . . . | . . ."
+//
+//    expect:
+//      grid.toString() == expectedgrid
+//  }
 }

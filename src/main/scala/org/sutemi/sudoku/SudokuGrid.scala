@@ -121,4 +121,19 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
         Some((index/9,index%9))
       }
     }
+
+    private def genPartialString(cell:IndexedSeq[Int],index:Int):String = {
+      val cellchar = if (cell.size == 1) cell(0) else "."
+      val sep = if (index == 26 || index == 53) "\n---------------------\n"
+                else if (index == 80) ""
+                else if ((index+1)%9 == 0) "\n"
+                else if ((index+1)%3 == 0) " | "
+                else " "
+      "" + cellchar + sep    // need empty string to be sure we are doing string concat instead of int addition
+    }
+
+    override def toString = {
+      val expanded = grid.zipWithIndex
+      expanded.foldLeft("[")((str,tup) => str + genPartialString(tup._1,tup._2)) + "]"
+    }
 }
