@@ -172,6 +172,24 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
           ". . . | . . . | . . .]"
       assert(empty.toString() === expectedstring)
     }
+
+    it("should generate a printable string for a partially filled grid") {
+      val empty = SudokuGrid()
+      val placed = empty.placeConjectures(List((0,0,1),(3,4,5)))
+      val expectedstring =
+        "[1 . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          "---------------------\n" +
+          ". . . | . 5 . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          "---------------------\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .\n" +
+          ". . . | . . . | . . .]"
+      assert(placed.toString() === expectedstring)
+    }
   }
 
 
