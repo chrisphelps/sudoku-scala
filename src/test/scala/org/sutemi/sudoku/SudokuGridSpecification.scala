@@ -200,5 +200,17 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
     it ("should do something reasonable for an empty puzzle") {
       assert(SudokuGrid.solve(SudokuGrid()) === None)
     }
+
+    ignore ("should solve an already solved puzzle") {
+      val solvedGiven = "003020600900305001001806400008102900700000008006708200002609500800203009005010300"
+      val solvedGrid = SudokuGrid.solve(SudokuGrid(solvedGiven))
+      assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
+    }
+
+    ignore ("should solve a search puzzle") {
+      val unsolvedGiven = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
+      val solvedGrid = SudokuGrid.solve(SudokuGrid(unsolvedGiven))
+      assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
+    }
   }
 }
