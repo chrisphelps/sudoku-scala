@@ -192,4 +192,13 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
     }
   }
 
+  describe("a sudoku solver") {
+    it ("should do something reasonable for a contradictory puzzle") {
+      assert(SudokuGrid.solve(ContradictorySudokuGrid) === None)
+    }
+
+    it ("should do something reasonable for an empty puzzle") {
+      assert(SudokuGrid.solve(SudokuGrid()) === None)
+    }
+  }
 }

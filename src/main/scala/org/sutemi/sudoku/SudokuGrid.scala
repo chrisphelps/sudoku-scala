@@ -49,6 +49,10 @@ object SudokuGrid {
     val empty = new LiveSudokuGrid
     empty.placeConjectures(givens.toList)
   }
+
+  def solve(puzzle:SudokuGrid) = {
+    None
+  }
 }
 
 class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends SudokuGrid {
