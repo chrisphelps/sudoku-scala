@@ -190,6 +190,15 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
           ". . . | . . . | . . .]"
       assert(placed.toString() === expectedstring)
     }
+
+    it ("should recognize an empty puzzle") {
+      val empty = SudokuGrid()
+      val contradiction = ContradictorySudokuGrid
+      val nonempty = empty.placeConjecture(5,5,5)
+      assert(empty.isEmpty === true)
+      assert(contradiction.isEmpty === false)
+      assert(nonempty.isEmpty === false)
+    }
   }
 
   describe("a sudoku solver") {

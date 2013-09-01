@@ -14,6 +14,7 @@ abstract class SudokuGrid {
   def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid
   def countPossibilities(row:Int, col:Int):Int
   def isSolution:Boolean
+  def isEmpty:Boolean
   def minimalPossibilityCell:Option[(Int,Int)]
 }
 
@@ -23,6 +24,7 @@ object ContradictorySudokuGrid extends SudokuGrid {
   override def placeConjectures(points:List[(Int,Int,Int)]):SudokuGrid = ContradictorySudokuGrid
   override def countPossibilities(row:Int, col:Int) = 0
   override def isSolution = false
+  override def isEmpty = false
   override def minimalPossibilityCell = None
 }
 
@@ -51,7 +53,7 @@ object SudokuGrid {
   }
 
   def solve(puzzle:SudokuGrid) = {
-    None
+     None
   }
 }
 
@@ -115,6 +117,8 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     override def countPossibilities(row:Int, col:Int) = grid(getIndex(row, col)).size
 
     override def isSolution = grid.forall(_.length == 1)
+
+    override def isEmpty = grid.forall(_.length == 9)
 
     override def minimalPossibilityCell = {
       val possibilityList = (for (i<-0 to 80) yield i).map(idx => (idx,grid(idx).length)).filter(_._2 > 1)
