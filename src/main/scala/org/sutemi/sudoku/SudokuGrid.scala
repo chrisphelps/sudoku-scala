@@ -53,7 +53,10 @@ object SudokuGrid {
   }
 
   def solve(puzzle:SudokuGrid) = {
-     None
+    if (puzzle == ContradictorySudokuGrid || puzzle.isEmpty)
+      None
+    else
+      Some(puzzle)
   }
 }
 
