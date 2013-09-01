@@ -120,7 +120,9 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
 
     it("should populate a grid from a string") {
       val givens = SudokuGrid("500000000080000000000000000000000000000000000000000000000000000000000000000000000")
+      val unsolvedgivens = SudokuGrid("4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......")
       assert(givens.isInstanceOf[LiveSudokuGrid])
+      assert(unsolvedgivens.isInstanceOf[LiveSudokuGrid])
       assert(givens.countPossibilities(0,0) === 1)
       assert(givens.countPossibilities(0,3) === 8)
       assert(givens.countPossibilities(0,1) === 7)
@@ -219,9 +221,10 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
     }
 
-    ignore ("should solve a search puzzle") {
+    it ("should solve a search puzzle") {
       val unsolvedGiven = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
-      val solvedGrid = SudokuGrid.solve(SudokuGrid(unsolvedGiven))
+      val unsolvedGrid = SudokuGrid(unsolvedGiven)
+      val solvedGrid = SudokuGrid.solve(unsolvedGrid)
       assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
     }
   }

@@ -47,7 +47,7 @@ object SudokuGrid {
   def apply():SudokuGrid = new LiveSudokuGrid
 
   def apply(puzzle:String):SudokuGrid = {
-    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1/9,a._1%9,a._2.asDigit)).filter(_._3 != 0)
+    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1/9,a._1%9,a._2.asDigit)).filter(_._3 > 0)
     val empty = new LiveSudokuGrid
     empty.placeConjectures(givens.toList)
   }
