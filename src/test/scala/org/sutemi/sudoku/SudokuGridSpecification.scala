@@ -161,6 +161,12 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       assert(contradiction.minimalPossibilityCell === None)
     }
 
+    it("should be able to fetch the list of possibilities") {
+      val givens = SudokuGrid("500000000080000000000000000000000000000000000000000000000000000000000000000000000")
+      val removed = givens.removePossibility(5,5,1).removePossibility(5,5,2).removePossibility(5,5,3).removePossibility(5,5,4)
+      assert(removed.getPossibilities(5,5) === List(5,6,7,8,9))
+    }
+
     it("should generate a printable string for an empty grid") {
       val empty = SudokuGrid()
       val expectedstring =
@@ -219,6 +225,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val solvedGiven = "003020600900305001001806400008102900700000008006708200002609500800203009005010300"
       val solvedGrid = SudokuGrid.solve(SudokuGrid(solvedGiven))
       assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
+      assert(solvedGrid.get.isSolution)
     }
 
     it ("should solve a search puzzle") {
@@ -226,6 +233,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val unsolvedGrid = SudokuGrid(unsolvedGiven)
       val solvedGrid = SudokuGrid.solve(unsolvedGrid)
       assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
+      //assert(solvedGrid.get.isSolution)
     }
   }
 }

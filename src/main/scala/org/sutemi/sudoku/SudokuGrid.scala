@@ -16,6 +16,7 @@ abstract class SudokuGrid {
   def isSolution:Boolean
   def isEmpty:Boolean
   def minimalPossibilityCell:Option[(Int,Int)]
+  def getPossibilities(row:Int, col:Int):List[Int]
 }
 
 object ContradictorySudokuGrid extends SudokuGrid {
@@ -26,6 +27,7 @@ object ContradictorySudokuGrid extends SudokuGrid {
   override def isSolution = false
   override def isEmpty = false
   override def minimalPossibilityCell = None
+  override def getPossibilities(row:Int, col:Int) = Nil
 }
 
 object SudokuGrid {
@@ -131,6 +133,10 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
         val index = possibilityList.minBy(_._2)._1
         Some((index/9,index%9))
       }
+    }
+
+    override def getPossibilities(row:Int, col:Int) = {
+      grid(getIndex(row,col)).toList
     }
 
     private def genPartialString(cell:IndexedSeq[Int],index:Int):String = {
