@@ -54,11 +54,23 @@ object SudokuGrid {
     empty.placeConjectures(givens.toList)
   }
 
-  def solve(puzzle:SudokuGrid) = {
+  def solve(puzzle:SudokuGrid):Option[SudokuGrid] = {
     if (puzzle == ContradictorySudokuGrid || puzzle.isEmpty)
       None
     else
-      Some(puzzle)
+      if (puzzle.isSolution)
+        Some(puzzle)
+      else
+        puzzle.minimalPossibilityCell match {
+          case None => None
+          case Some((row,col)) => {
+            val nextpuzzles = puzzle.getPossibilities(row,col).map(poss => puzzle.placeConjecture(row,col,poss))
+            nextpuzzles.foldLeft(None.asInstanceOf[Option[SudokuGrid]])((left,right) => left match {
+              case Some(puzzle) => left
+              case None => solve(right)
+            })
+          }
+        }
   }
 }
 

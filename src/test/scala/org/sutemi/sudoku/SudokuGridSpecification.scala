@@ -233,7 +233,7 @@ class SudokuGridSpecification extends FunSpec with ShouldMatchers {
       val unsolvedGrid = SudokuGrid(unsolvedGiven)
       val solvedGrid = SudokuGrid.solve(unsolvedGrid)
       assert(solvedGrid.isInstanceOf[Some[SudokuGrid]])
-      //assert(solvedGrid.get.isSolution)
+      assert(solvedGrid.get.isSolution)
     }
   }
 }
