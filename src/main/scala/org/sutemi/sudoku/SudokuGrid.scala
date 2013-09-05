@@ -151,19 +151,17 @@ object SudokuGrid {
   def solve(puzzle: SudokuGrid): Option[SudokuGrid] = {
     if (puzzle == ContradictorySudokuGrid || puzzle.isEmpty)
       None
-    else
-    if (puzzle.isSolution)
+    else if (puzzle.isSolution)
       Some(puzzle)
-    else
-      puzzle.minimalPossibilityCell match {
-        case None => None
-        case Some((row, col)) => {
-          val nextpuzzles = puzzle.getPossibilities(row, col) map (poss => puzzle.placeConjecture(row, col, poss))
-          nextpuzzles.foldLeft(None: Option[SudokuGrid]) ((left, right) => left match {
-            case Some(puzzle) => left
-            case None => solve(right)
-          })
-        }
+    else puzzle.minimalPossibilityCell match {
+      case None => None
+      case Some((row, col)) => {
+        val nextpuzzles = puzzle.getPossibilities(row, col) map (poss => puzzle.placeConjecture(row, col, poss))
+        nextpuzzles.foldLeft(None: Option[SudokuGrid]) ((left, right) => left match {
+          case Some(puzzle) => left
+          case None => solve(right)
+        })
       }
+    }
   }
 }
