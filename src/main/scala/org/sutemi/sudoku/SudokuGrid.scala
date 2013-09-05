@@ -30,50 +30,6 @@ object ContradictorySudokuGrid extends SudokuGrid {
   override def getPossibilities(row:Int, col:Int) = Nil
 }
 
-object SudokuGrid {
-  def getRowCells(row:Int, col:Int) =
-    for(i <- 0 to 8 if i != col) yield (row,i)
-
-  def getColCells(row:Int, col:Int) =
-    for(i <- 0 to 8 if i != row) yield (i,col)
-
-  def getPeerCells(row:Int, col:Int) = {
-    val rowmultiple = row / 3
-    val colmultiple = col / 3
-    for { i <- 0 until 3
-          j <- 0 until 3
-          if !((i == row % 3) && (j == col % 3))}
-    yield (i + 3 * rowmultiple, j + 3 * colmultiple)
-  }
-
-  def apply():SudokuGrid = new LiveSudokuGrid
-
-  def apply(puzzle:String):SudokuGrid = {
-    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1/9,a._1%9,a._2.asDigit)).filter(_._3 > 0)
-    val empty = new LiveSudokuGrid
-    empty.placeConjectures(givens.toList)
-  }
-
-  def solve(puzzle:SudokuGrid):Option[SudokuGrid] = {
-    if (puzzle == ContradictorySudokuGrid || puzzle.isEmpty)
-      None
-    else
-      if (puzzle.isSolution)
-        Some(puzzle)
-      else
-        puzzle.minimalPossibilityCell match {
-          case None => None
-          case Some((row,col)) => {
-            val nextpuzzles = puzzle.getPossibilities(row,col).map(poss => puzzle.placeConjecture(row,col,poss))
-            nextpuzzles.foldLeft(None.asInstanceOf[Option[SudokuGrid]])((left,right) => left match {
-              case Some(puzzle) => left
-              case None => solve(right)
-            })
-          }
-        }
-  }
-}
-
 class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends SudokuGrid {
 
     def this() = { this(for (i <- 0 until 81) yield for (j <- 1 to 9) yield j) }
@@ -165,4 +121,48 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
       val expanded = grid.zipWithIndex
       expanded.foldLeft("[")((str,tup) => str + genPartialString(tup._1,tup._2)) + "]"
     }
+}
+
+object SudokuGrid {
+  def getRowCells(row:Int, col:Int) =
+    for(i <- 0 to 8 if i != col) yield (row,i)
+
+  def getColCells(row:Int, col:Int) =
+    for(i <- 0 to 8 if i != row) yield (i,col)
+
+  def getPeerCells(row:Int, col:Int) = {
+    val rowmultiple = row / 3
+    val colmultiple = col / 3
+    for { i <- 0 until 3
+          j <- 0 until 3
+          if !((i == row % 3) && (j == col % 3))}
+    yield (i + 3 * rowmultiple, j + 3 * colmultiple)
+  }
+
+  def apply():SudokuGrid = new LiveSudokuGrid
+
+  def apply(puzzle:String):SudokuGrid = {
+    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1/9,a._1%9,a._2.asDigit)).filter(_._3 > 0)
+    val empty = new LiveSudokuGrid
+    empty.placeConjectures(givens.toList)
+  }
+
+  def solve(puzzle:SudokuGrid):Option[SudokuGrid] = {
+    if (puzzle == ContradictorySudokuGrid || puzzle.isEmpty)
+      None
+    else
+    if (puzzle.isSolution)
+      Some(puzzle)
+    else
+      puzzle.minimalPossibilityCell match {
+        case None => None
+        case Some((row,col)) => {
+          val nextpuzzles = puzzle.getPossibilities(row,col).map(poss => puzzle.placeConjecture(row,col,poss))
+          nextpuzzles.foldLeft(None.asInstanceOf[Option[SudokuGrid]])((left,right) => left match {
+            case Some(puzzle) => left
+            case None => solve(right)
+          })
+        }
+      }
+  }
 }
