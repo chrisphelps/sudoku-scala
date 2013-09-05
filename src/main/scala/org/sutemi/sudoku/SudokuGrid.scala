@@ -94,7 +94,7 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
     override def isEmpty = grid.forall(_.length == 9)
 
     override def minimalPossibilityCell = {
-      val possibilityList = (for (i<-0 to 80) yield i).map(idx => (idx, grid(idx).length)).filter(_._2 > 1)
+      val possibilityList = (for (i<-0 to 80) yield i) map (idx => (idx, grid(idx).length)) filter (_._2 > 1)
       if (possibilityList.isEmpty)
         None
       else {
@@ -119,7 +119,7 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
 
     override def toString = {
       val expanded = grid.zipWithIndex
-      expanded.foldLeft("[")((str, tup) => str + genPartialString(tup._1, tup._2)) + "]"
+      expanded.foldLeft("[") ((str, tup) => str + genPartialString(tup._1, tup._2)) + "]"
     }
 }
 
@@ -142,7 +142,7 @@ object SudokuGrid {
   def apply(): SudokuGrid = new LiveSudokuGrid
 
   def apply(puzzle: String): SudokuGrid = {
-    val givens = (for (i <- 0 to 80) yield i).zip(puzzle.toList).map(a =>(a._1 / 9, a._1 % 9, a._2.asDigit)).filter(_._3 > 0)
+    val givens = (for (i <- 0 to 80) yield i) zip (puzzle.toList) map (a =>(a._1 / 9, a._1 % 9, a._2.asDigit)) filter (_._3 > 0)
     val empty = new LiveSudokuGrid
     empty.placeConjectures(givens.toList)
   }
@@ -157,8 +157,8 @@ object SudokuGrid {
       puzzle.minimalPossibilityCell match {
         case None => None
         case Some((row, col)) => {
-          val nextpuzzles = puzzle.getPossibilities(row, col).map(poss => puzzle.placeConjecture(row, col, poss))
-          nextpuzzles.foldLeft(None.asInstanceOf[Option[SudokuGrid]])((left, right) => left match {
+          val nextpuzzles = puzzle.getPossibilities(row, col) map (poss => puzzle.placeConjecture(row, col, poss))
+          nextpuzzles.foldLeft(None: Option[SudokuGrid]) ((left, right) => left match {
             case Some(puzzle) => left
             case None => solve(right)
           })
