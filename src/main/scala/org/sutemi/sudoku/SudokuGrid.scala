@@ -107,7 +107,7 @@ class LiveSudokuGrid(private val grid: IndexedSeq[IndexedSeq[Int]]) extends Sudo
       grid(getIndex(row, col)).toList
     }
 
-    private def genPartialString(cell: IndexedSeq[Int],index: Int): String = {
+    private def genPartialString(cell: IndexedSeq[Int], index: Int): String = {
       val cellchar = if (cell.size == 1) cell(0) else "."
       val sep = if (index == 26 || index == 53) "\n---------------------\n"
                 else if (index == 80) ""
@@ -133,10 +133,11 @@ object SudokuGrid {
   def getPeerCells(row: Int, col: Int) = {
     val rowmultiple = row / 3
     val colmultiple = col / 3
-    for { i <- 0 until 3
-          j <- 0 until 3
-          if !((i == row % 3) && (j == col % 3))}
-    yield (i + 3 * rowmultiple, j + 3 * colmultiple)
+    for {
+      i <- 0 until 3
+      j <- 0 until 3
+      if !((i == row % 3) && (j == col % 3))
+    } yield (i + 3 * rowmultiple, j + 3 * colmultiple)
   }
 
   def apply(): SudokuGrid = new LiveSudokuGrid
