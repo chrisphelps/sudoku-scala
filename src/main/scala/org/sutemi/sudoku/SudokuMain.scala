@@ -14,10 +14,12 @@ object SudokuMain {
       val source = Source.fromFile(filename)
       val lines = source.getLines
 
-      for (l <- lines) {
-        val solution = SudokuGrid.solve(SudokuGrid(l))
+      val lineswithindex = lines.zipWithIndex
+
+      for (l <- lineswithindex) {
+        val solution = SudokuGrid.solve(SudokuGrid(l._1))
         solution match {
-          case Some(solvedgrid) => if (solvedgrid.isSolution) println("Solved") else println("Not solved")
+          case Some(solvedgrid) => if (solvedgrid.isSolution) println("Solved puzzle " + (l._2 + 1)) else println("Not solved")
           case None => println("Not solved")
         }
       }
