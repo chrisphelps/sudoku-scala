@@ -16,7 +16,8 @@ object SudokuMain {
 
       val lineswithindex = lines.zipWithIndex
 
-      for (l <- lineswithindex) {
+      val times = for (l <- lineswithindex)  yield {
+        val starttime = System.currentTimeMillis()
         val solution = SudokuGrid.solve(SudokuGrid(l._1))
         val status = solution match {
           case Some(solvedgrid) =>
@@ -24,9 +25,11 @@ object SudokuMain {
             else "Not solved"
           case None => "Not solved"
         }
-        println(status)
+        val endtime = System.currentTimeMillis()
+        println(status + " in " + (endtime - starttime) + "ms")
+        endtime - starttime
       }
-      println("Solves done")
+      println("Solves done - total time " + times.reduce(_+_) + "ms")
     }
     processFile("sudoku.txt")
     println("Easy solves done")
