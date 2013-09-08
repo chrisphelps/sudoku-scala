@@ -18,10 +18,13 @@ object SudokuMain {
 
       for (l <- lineswithindex) {
         val solution = SudokuGrid.solve(SudokuGrid(l._1))
-        solution match {
-          case Some(solvedgrid) => if (solvedgrid.isSolution) println("Solved puzzle " + (l._2 + 1)) else println("Not solved")
-          case None => println("Not solved")
+        val status = solution match {
+          case Some(solvedgrid) =>
+            if (solvedgrid.isSolution) "Solved puzzle " + (l._2 + 1)
+            else "Not solved"
+          case None => "Not solved"
         }
+        println(status)
       }
       println("Solves done")
     }
