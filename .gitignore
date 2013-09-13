@@ -1,4 +1,6 @@
-lib
-out
+lib/
+out/
 sudoku-scala.iml
 .idea
+target/
+org/
